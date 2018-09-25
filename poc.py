@@ -14,27 +14,32 @@ def get_tor_session():
 	return session
 
 def renewIP():
-	print 'entre a renew ip'
 	try:
 		with Controller.from_port(port = 9051) as controller:
 			controller.authenticate()
 			controller.signal(Signal.NEWNYM)
 	except Exception as e:
-		print 'Oie no '
 		print e
-	print 'sali de renew ip'
+	time.sleep(1)
+
+def getIP(session):
+	myip = session.get("http://httpbin.org/ip").text
+	myip = myip.replace('\n','').replace('\r\n','').replace('{','').replace('}','').split(':')[1]
+	return myip
 
 # Make a request through the Tor connection
 # IP visible through Tor
 session = get_tor_session()
-print(session.get("http://httpbin.org/ip").text)
+print(getIP(session))
+
+#print(session.get("http://httpbin.org/ip").text)
 # Above should print an IP different than your public IP
 
 # Following prints your normal public IP
-print(requests.get("http://httpbin.org/ip").text)
+#print(requests.get("http://httpbin.org/ip").text)
 
 
 renewIP()
 session = get_tor_session()
-time.sleep(4)
-print(session.get("http://httpbin.org/ip").text)
+print(getIP(session))
+
