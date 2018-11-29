@@ -1,0 +1,58 @@
+import sqlite3
+class DBManager:
+	def __init__(self,dbname):
+		self.db = self.getDBConnection(dbname)
+		self.cursor = self.getDBCursor()
+
+	def getDBConnection(self,dbname):
+		try:
+			bd = sqlite3.connect(dbname)
+			return bd
+		except Exception as e:
+			print("Problem openning the database")
+			print(e)
+
+	def getDBCursor(self):
+		try:
+			return self.db.cursor()
+		except Exception as e:
+			print("Problem returning cursor")
+			print(e)
+
+	def initTables(self):
+		tables = ["CREATE TABLE IF NOT EXISTS ips(ip varchar(18) PRIMARY KEY ASC);",
+			"CREATE TABLE IF NOT EXISTS sites(site varchar(200),ip,FOREIGN KEY(ip) REFERENCES ips(ip));"]
+		for table in tables:
+			try:
+				self.cursor.execute(table);
+			except Exception as e:
+				print("Error in initTables")
+				print(e)
+		print("Tablas creadas correctamente")
+
+	def insertInfo(self,ip,site):
+		queries =["INSERT OR IGNORE INTO ips VALUES('%s');" % ip,
+			"INSERT INTO sites VALUES('%s','%s');" % (ip,site)]
+		for q in queries:
+			print(q)
+			try:
+				self.cursor.execute(q)
+			except Exception as e:
+				print("Error @insertInfo")
+				print(e)
+
+	def closeDB(self):
+		try:
+			self.db.commit()
+		except Exception as e:
+			print("Problem closing db")
+			print(e)
+			
+ip = '132.248.124.180'
+sites = ['acceso.seguridad.unam.mx','correo.seguridad.unam.mx','vpn.seguridad.unam.mx']
+
+bdman = DBManager('pocpoc.db')
+bdman.initTables()
+for site in sites:
+	bdman.insertInfo(ip,site)
+bdman.closeDB()
