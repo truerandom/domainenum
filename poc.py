@@ -139,7 +139,7 @@ class DBManager:
 domenum = DomainEnum('unamsites.db')
 print 'Requesting info with ip %s ' % domenum.getIP()
 for i in range(90,100):
-	cur_ip = '132.248.124.%s' % i
+	cur_ip = 'XXX.XXX.XXX.%s' % i
 	domains = domenum.getDomains(cur_ip) 
 	print cur_ip
 	print '\n'.join(domains)
