@@ -48,8 +48,8 @@ class DBManager:
 			print("Problem closing db")
 			print(e)
 			
-ip = '132.248.124.180'
-sites = ['acceso.seguridad.unam.mx','correo.seguridad.unam.mx','vpn.seguridad.unam.mx']
+ip = 'X.X.X.180'
+sites = ['']
 
 bdman = DBManager('pocpoc.db')
 bdman.initTables()
